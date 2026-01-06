@@ -208,7 +208,7 @@ target_include_directories(Zokata-engine
 target_link_libraries(Zokata-engine
     PUBLIC
         Zokata-renderer
-        yaml-cpp
+        yaml-cpp::yaml-cpp
         Zokata-log
         Zokata-math
 )
