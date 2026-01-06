@@ -1,0 +1,56 @@
+version: 1
+scene:
+  name: "DebugScene"
+
+  assets:
+    meshes:
+      cube:   "assets/meshes/primitives/cube.glb#Mesh"
+      sphere: "assets/meshes/primitives/sphere.glb#Mesh"
+    materials:
+      defaultLit: "assets/materials/default_lit.mat"
+
+  entities:
+    - id: 1
+      name: "Cube"
+      components:
+        Transform:
+          position: { x: 0.0, y: 0.0, z: 0.0 }
+          rotation: { x: 0.0, y: 0.0, z: 0.0 }   # Euler degrees
+          scale:    { x: 1.0, y: 1.0, z: 1.0 }
+        MeshRenderer:
+          mesh: "cube"
+          material: "defaultLit"
+
+    - id: 2
+      name: "Sphere"
+      components:
+        Transform:
+          position: { x: 2.0, y: 0.0, z: 0.0 }
+          rotation: { x: 0.0, y: 90.0, z: 0.0 }
+          scale:    { x: 1.0, y: 1.0, z: 1.0 }
+        MeshRenderer:
+          mesh: "sphere"
+          material: "defaultLit"
+      children:
+        - id: 3
+          name: "SphereChild"
+          components:
+            Transform:
+              position: { x: 0.5, y: 0.5, z: 0.0 }
+              rotation: { x: 0.0, y: 0.0, z: 0.0 }
+              scale:    { x: 0.5, y: 0.5, z: 0.5 }
+
+    - id: 10
+      name: "MainCamera"
+      components:
+        Transform:
+          position: { x: 0.0, y: 1.5, z: 5.0 }
+          rotation: { x: 0.0, y: 0.0, z: 0.0 }
+          scale:    { x: 1.0, y: 1.0, z: 1.0 }
+        Camera:
+          projection: "Perspective"
+          vertical_fov_degrees: 60.0
+          near: 0.1
+          far: 500.0
+          clear_color_rgba: { r: 0.06, g: 0.07, b: 0.09, a: 1.0 }
+          exposure: 1.0
