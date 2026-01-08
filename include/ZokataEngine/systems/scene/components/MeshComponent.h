@@ -3,6 +3,7 @@
 #include <string>
 
 #include "ZokataEngine/systems/scene/Component.h"
+#include "ZokataEngine/systems/scene/components/Primitives/MeshPrimitives.h"
 #include "ZokataRenderer/graphics/renderer/Renderable.h"
 
 namespace ZKT
@@ -60,6 +61,12 @@ public:
 
     const std::string& MaterialAssetId() const;
     void SetMaterialAssetId(std::string id);
+
+    /**
+     * @brief Convenience helpers to build common primitive geometry.
+     */
+    void SetPrimitiveCube(const CubeParams& params = {});
+    void SetPrimitiveSphere(const SphereParams& params = {});
 
 private:
     MeshGeometry geometry_;

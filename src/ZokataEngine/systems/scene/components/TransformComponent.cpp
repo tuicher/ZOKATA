@@ -32,6 +32,16 @@ void TransformComponent::SetScale(const MATH::Vec3f& s)
     MarkDirty();
 }
 
+void TransformComponent::Scale(const MATH::Vec3f& multiplier)
+{
+    scale_ = MATH::Vec3f{
+        scale_.x * multiplier.x,
+        scale_.y * multiplier.y,
+        scale_.z * multiplier.z,
+    };
+    MarkDirty();
+}
+
 const MATH::Quaternion& TransformComponent::GetQuaternion() const
 {
     return rotation_;
@@ -62,9 +72,20 @@ const MATH::Quaternion& TransformComponent::WorldRotation() const
     return world_rotation_;
 }
 
+const MATH::Mat4f& TransformComponent::GetModelMatrix() const
+{
+    if (model_dirty_)
+    {
+        model_matrix_ = MATH::Mat4f::FromTRS(world_position_, world_rotation_, world_scale_);
+        model_dirty_ = false;
+    }
+    return model_matrix_;
+}
+
 void TransformComponent::MarkDirty()
 {
     dirty_ = true;
+    model_dirty_ = true;
     // Note: in a full ECS we would propagate to children; left as TODO.
 }
 
@@ -88,6 +109,13 @@ MATH::Vec3f TransformComponent::EulerDegrees() const
 void TransformComponent::SetEulerDegrees(const MATH::Vec3f& euler)
 {
     rotation_ = MATH::Quaternion::FromEulerDegrees(euler);
+    MarkDirty();
+}
+
+void TransformComponent::Rotate(const MATH::Vec3f& euler_degrees)
+{
+    rotation_ = MATH::Quaternion::FromEulerDegrees(euler_degrees) * rotation_;
+    rotation_.Normalize();
     MarkDirty();
 }
 
@@ -152,6 +180,7 @@ void TransformComponent::UpdateWorld(const TransformComponent* parent)
     }
 
     dirty_ = false;
+    model_dirty_ = true;
 }
 }  // namespace ENGINE
 }  // namespace ZKT

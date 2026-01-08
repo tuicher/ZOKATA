@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "ZokataEngine/systems/scene/Component.h"
+#include "ZokataMath/Matrix.h"
 #include "ZokataMath/Quaternion.h"
 #include "ZokataMath/Vector.h"
 
@@ -45,6 +46,10 @@ public:
      * @brief Sets local scale.
      */
     void SetScale(const MATH::Vec3f& s);
+    /**
+     * @brief Scales local scale by a component-wise multiplier.
+     */
+    void Scale(const MATH::Vec3f& multiplier);
 
     // Rotation helpers
     // Helpers to work with Euler angles (degrees) like Unity exposes.
@@ -53,6 +58,10 @@ public:
      * @brief Sets rotation from Euler angles in degrees.
      */
     void SetEulerDegrees(const MATH::Vec3f& euler);
+    /**
+     * @brief Rotates by Euler angles in degrees (applied to current rotation).
+     */
+    void Rotate(const MATH::Vec3f& euler_degrees);
 
     // Direct setter when you want to provide raw quaternion components.
     void SetQuaternion(float w, float x, float y, float z);
@@ -78,6 +87,10 @@ public:
     const MATH::Vec3f& WorldScale() const;
     const MATH::Quaternion& WorldRotation() const;
     /**
+     * @brief Returns cached model matrix (built from world transform).
+     */
+    const MATH::Mat4f& GetModelMatrix() const;
+    /**
      * @brief Recomputes world transforms from the local transform and optional parent.
      */
     void UpdateWorld(const TransformComponent* parent);
@@ -96,6 +109,8 @@ private:
     int64_t parent_id_ = -1;
     std::vector<int64_t> children_ids_;
     bool dirty_ = true;
+    mutable bool model_dirty_ = true;
+    mutable MATH::Mat4f model_matrix_ {};
 };
 }  // namespace ENGINE
 }  // namespace ZKT

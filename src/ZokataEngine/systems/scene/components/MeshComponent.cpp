@@ -102,5 +102,15 @@ void MeshComponent::SetMaterialAssetId(std::string id)
     material_asset_id_ = std::move(id);
     // TODO: Resolve asset -> material/shader/textures once material system exists.
 }
+
+void MeshComponent::SetPrimitiveCube(const CubeParams& params)
+{
+    SetGeometry(MakeCube(params));
+}
+
+void MeshComponent::SetPrimitiveSphere(const SphereParams& params)
+{
+    SetGeometry(MakeSphere(params));
+}
 }  // namespace ENGINE
 }  // namespace ZKT
